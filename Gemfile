@@ -1,13 +1,23 @@
-#after any changes to the Gemfile, execute bundle update!
+# frozen_string_literal: true
+
 source "https://rubygems.org"
 
-gem "jekyll-remote-theme"
+gemspec
 
-group :jekyll_plugins do
-  gem "jekyll-feed", "~> 0.6"
-  # gem "github-pages" # https://github.com/github/pages-gem
+group :test do
+  gem "html-proofer", "~> 4.4"
 end
 
-# Uncomment the following line if developing on Windows: 
+# Windows and JRuby does not include zoneinfo files, so bundle the tzinfo-data gem
+# and associated library.
+platforms :mingw, :x64_mingw, :mswin, :jruby do
+  gem "tzinfo", ">= 1", "< 3"
+  gem "tzinfo-data"
+end
+
 # Performance-booster for watching directories on Windows
-# gem "wdm", ">= 0.1.0" if Gem.win_platform?
+gem "wdm", "~> 0.1.1", :platforms => [:mingw, :x64_mingw, :mswin]
+
+# Lock `http_parser.rb` gem to `v0.6.x` on JRuby builds since newer versions of the gem
+# do not have a Java counterpart.
+gem "http_parser.rb", "~> 0.6.0", :platforms => [:jruby]
